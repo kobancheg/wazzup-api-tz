@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const { pool } = require('../config/db');
 const logger = require('../config/logger');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -45,6 +45,7 @@ class authController {
       try {
          const client = await pool.connect();
          const { email, password } = req.body;
+
          const user = await client.query(`SELECT * FROM person WHERE email = '${email}'`);
 
          if (user.rows[0] === undefined) {
@@ -56,11 +57,29 @@ class authController {
             if (!result) return res.status(400).json({ message: 'Введен не верный пароль' });
 
             const token = generateAccessToken(id, trueEmail);
-            return res.json({ token });
+
+            req.session.email = email;
+            req.session.token = token;
+
+            return res.end('Success')
          });
+
          client.release();
       } catch (err) {
          res.status(400).json({ message: 'Login error' })
+         logger.error(err.stack);
+      }
+   }
+
+   async logout(req, res) {
+      try {
+         req.session.destroy(err => {
+            if (err) logger.error(err.stack);
+
+            res.end('Logout successfuly');
+        });
+      } catch (err) {
+         res.status(400).json({ message: 'Logout error' })
          logger.error(err.stack);
       }
    }

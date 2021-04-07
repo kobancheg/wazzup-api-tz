@@ -18,12 +18,15 @@
   "homepage": "https://github.com/kobancheg/wazzup-api-tz#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "connect-redis": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "express-validator": "^6.10.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.5.1",
+    "redis": "^3.1.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
