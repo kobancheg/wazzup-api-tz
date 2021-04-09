@@ -1,7 +1,7 @@
 require('dotenv').config();
 const logger = require('./config/logger');
 const session = require('express-session');
-const middlewareSessions = require('./middleware/sessions');
+const middlewareSessions = require('./libs/sessions');
 
 const express = require('express');
 const cors = require('cors');

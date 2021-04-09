@@ -9,16 +9,14 @@ router.post('/note/create', [
    check('body', 'Тело заметки не может быть блоее 1000 символов').isLength({ min: 0, max: 1000 }),
 ], noteController.createNote);
 
-// router.post('/note/update', isAuth, async (req, res) => {
-//    try {
-//      const list = await SubscriptionService.getAllSubscriptions(req.uid);
-//      return res.status(200).send(list);
-//    } catch (err) {
-//      return res.status(400).send({ error: true, message: err });
-//    }
-// });
-
 router.get('/note/getall', noteController.getNotes);
-// router.get('/note/delete', noteController.delete);
+
+router.put('/note/update', [
+   check('title', 'Название заметки не может быть пустым').notEmpty(),
+   check('body', 'Тело заметки не может быть пустым').notEmpty(),
+   check('body', 'Тело заметки не может быть блоее 1000 символов').isLength({ min: 0, max: 1000 }),
+], noteController.updateNote);
+
+router.delete('/note/delete', noteController.deleteNote);
 
 module.exports = router;

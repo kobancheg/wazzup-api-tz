@@ -27,18 +27,59 @@ class NoteController {
    }
 
    async getNotes(req, res) {
-      const client = await pool.connect();
-      const notes = await client.query(`SELECT * FROM Note`);
+      try {
+         const { count, offset = 0 } = req.query;
+         const client = await pool.connect();
+         const notes = await client.query(
+            `SELECT id, title, body, created_at FROM note ORDER BY note.id ASC LIMIT $1 OFFSET $2`, [count, offset]
+         );
 
-      client.release();
-      res.status(200).json(notes.rows);
-      return newNote.rows[0];
+         client.release();
+         res.status(200).json(notes.rows);
+         return notes.rows;
+      } catch (err) {
+         res.status(400).json({ message: 'Error get note' })
+         logger.error(err.stack);
+      }
    }
 
-   async getPostById(id) {
+   async updateNote(req, res) {
+      try {
+         const errors = validationResult(req);
+         if (!errors.isEmpty()) {
+            return res.status(400).json({ message: 'Ошибка при редактировании', errors })
+         };
 
-      const { rows } = await db.query(`SELECT * FROM post WHERE id = $1`, [id]);
-      return rows
+         const { id, title, body } = req.body;
+         const client = await pool.connect();
+
+         const note = await pool.query(
+            `UPDATE Note SET title = $1, body = $2, updated_at = NOW() WHERE id = $3 RETURNING *`, [title, body, id]
+         );
+
+         client.release();
+         res.status(200).json(note.rows);
+         return note.rows;
+      } catch (err) {
+         res.status(400).json({ message: 'Error update note' })
+         logger.error(err.stack);
+      }
+   }
+
+   async deleteNote(req, res) {
+      try {
+         const { id } = req.query;
+         const client = await pool.connect();
+
+         const note = await pool.query(`DELETE FROM Note WHERE id = $1`, [id]);
+
+         client.release();
+         res.status(200).json({ message: 'Заметка успешно удалена' });
+         return note.rows;
+      } catch (err) {
+         res.status(400).json({ message: 'Error delete note' })
+         logger.error(err.stack);
+      }
    }
 }
 
