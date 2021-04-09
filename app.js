@@ -1,12 +1,9 @@
 require('dotenv').config();
 const logger = require('./config/logger');
-const config = require('./config/environment');
-const { redisClient } = require('./config/db');
-const authRouter = require('./routes/authRouter');
+const session = require('express-session');
+const middlewareSessions = require('./middleware/sessions');
 
 const express = require('express');
-const session = require('express-session');
-const connectRedis = require('connect-redis');
 const cors = require('cors');
 const app = express();
 
@@ -15,22 +12,13 @@ const PORT = process.env.PORT || 5000;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
+app.use(session(middlewareSessions));
 
-const RedisStore = connectRedis(session);
-
-app.use(session({
-   store: new RedisStore({ client: redisClient }),
-   secret: config.secret,
-   resave: false,
-   saveUninitialized: false,
-   cookie: {
-      secure: false,
-      httpOnly: false,
-      maxAge: 1000 * 60 * 10
-   }
-}));
+const authRouter = require('./routes/authRouter');
+const notesRouter = require('./routes/noteRouter');
 
 app.use('/auth', authRouter);
+app.use('/api', notesRouter);
 
 app.get('/', (req, res) => {
    const resault = req.session;

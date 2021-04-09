@@ -1,5 +1,4 @@
 const Router = require('express');
-const logger = require('../config/logger');
 const router = Router();
 const { check } = require('express-validator');
 const authController = require('../controller/authController');
@@ -8,9 +7,9 @@ router.post('/registration', [
    check('name', 'Имя пользователя не может быть пустым').notEmpty(),
    check('email', 'Не корректный email').isEmail(),
    check('password', 'Пароль должен быть не меньше 6 и не больше 12 символов').isLength({ min: 6, max: 12 }),
-], authController.registration);
+], authController.userRegistration);
 
-router.post('/login', authController.login);
-router.get('/logout', authController.logout);
+router.post('/login', authController.userLogin);
+router.get('/logout', authController.userLogout);
 
 module.exports = router;

@@ -11,7 +11,7 @@ const generateAccessToken = (id, email) => {
 }
 
 class authController {
-   async registration(req, res) {
+   async userRegistration(req, res) {
       try {
          const client = await pool.connect();
          const errors = validationResult(req);
@@ -41,7 +41,7 @@ class authController {
       }
    }
 
-   async login(req, res) {
+   async userLogin(req, res) {
       try {
          const client = await pool.connect();
          const { email, password } = req.body;
@@ -71,7 +71,7 @@ class authController {
       }
    }
 
-   async logout(req, res) {
+   async userLogout(req, res) {
       try {
          req.session.destroy(err => {
             if (err) logger.error(err.stack);
