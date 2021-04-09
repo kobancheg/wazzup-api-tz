@@ -11,12 +11,14 @@ router.post('/note/create', [
 
 router.get('/note/getall', noteController.getNotes);
 
-router.put('/note/update', [
+router.put('/note/update/:id', [
    check('title', 'Название заметки не может быть пустым').notEmpty(),
    check('body', 'Тело заметки не может быть пустым').notEmpty(),
    check('body', 'Тело заметки не может быть блоее 1000 символов').isLength({ min: 0, max: 1000 }),
 ], noteController.updateNote);
 
-router.delete('/note/delete', noteController.deleteNote);
+router.delete('/note/delete/:id', noteController.deleteNote);
+router.get('/note/share/:id', noteController.shareNote);
+router.get('/:link', noteController.getSharedNote);
 
 module.exports = router;

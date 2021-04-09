@@ -1,6 +1,6 @@
 require('dotenv').config();
 const logger = require('./config/logger');
-const middlewareSessions = require('./libs/sessions');
+const instanceSessions = require('./libs/sessions');
 const isAuth = require('./middleware/authentication');
 
 const express = require('express');
@@ -15,13 +15,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser())
 app.use(express.json());
 app.use(cors());
-app.use(session(middlewareSessions));
+app.use(session(instanceSessions));
 
 const authRouter = require('./routes/authRouter');
 const notesRouter = require('./routes/noteRouter');
 
 app.use('/auth', authRouter);
 app.use('/api', isAuth, notesRouter);
+app.use('/free', notesRouter);
 
 app.get('/', (req, res) => {
    const resault = req.session;
