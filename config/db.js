@@ -11,7 +11,7 @@ const pool = new Pool({
    database: config.db.database
 });
 
-(async function () {
+(async () => {
    try {
       const client = await pool.connect();
       await client.query('SELECT NOW()');

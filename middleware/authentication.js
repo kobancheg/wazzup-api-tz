@@ -8,6 +8,7 @@ const asyncClient = promisify(redisClient.get).bind(redisClient);
 
 module.exports = async (req, res, next) => {
    if (req.method === 'OPTIONS') return next();
+   if (process.env.NODE_TLS_REJECT_UNAUTHORIZED === '0') return next();
 
    try {
       const cookies = req.cookies['connect.sid'];

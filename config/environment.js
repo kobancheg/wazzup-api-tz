@@ -9,7 +9,13 @@ const {
 
 module.exports = {
    secret: SECRET_KEY_RANDOM,
-   db: {
+   db: (process.env.NODE_ENV === 'test') ? {
+      user: 'camopu',
+      password: '',
+      host: 'localhost',
+      port: 5431,
+      database: 'wazzup_test'
+   } : {
       user: DB_USER,
       password: DB_PASSWORD,
       host: DB_HOST,
