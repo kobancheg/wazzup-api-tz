@@ -31,7 +31,8 @@ const userRegistration = async (req, res) => {
             `INSERT INTO person (name, email, hash) values ($1, $2, $3) RETURNING *`, [name, email, hash]
          );
          const { name: currentName } = newPerson.rows[0];
-         return res.status(200).json({ message: `${currentName} Вы успешно зарегистрированы` });
+         return res.status(200).json(
+            { message: `${currentName} Вы успешно зарегистрированы` });
       });
 
       client.release();
@@ -49,7 +50,7 @@ const userLogin = async (req, res) => {
       const user = await client.query(`SELECT * FROM person WHERE email = '${email}'`);
 
       if (user.rows[0] === undefined) {
-         return res.status(400).json({ message: `Пользователь с ${email} не зарегистрирован` })
+         return res.status(401).json({ message: `Пользователь с ${email} не зарегистрирован` })
       };
 
       const { id, name, email: trueEmail, hash } = user.rows[0];

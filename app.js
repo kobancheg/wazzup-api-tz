@@ -34,4 +34,6 @@ const init = () => {
 
 init();
 
-module.exports = app;
+module.exports = app.listen(PORT, () => {
+   console.log(`Server running at http://localhost:${PORT}`);
+});
