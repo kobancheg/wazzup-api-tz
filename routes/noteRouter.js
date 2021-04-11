@@ -1,24 +1,31 @@
 const Router = require('express');
 const router = Router();
 const { check } = require('express-validator');
-const noteController = require('../controller/noteController');
+const {
+   createNote,
+   getNotes,
+   updateNote,
+   deleteNote,
+   shareNote,
+   getSharedNote
+} = require('../controller/noteController');
 
 router.post('/note/create', [
    check('title', 'Название заметки не может быть пустым').notEmpty(),
    check('body', 'Тело заметки не может быть пустым').notEmpty(),
    check('body', 'Тело заметки не может быть блоее 1000 символов').isLength({ min: 0, max: 1000 }),
-], noteController.createNote);
+], createNote);
 
-router.get('/note/getall', noteController.getNotes);
+router.get('/note/getall', getNotes);
 
 router.put('/note/update/:id', [
    check('title', 'Название заметки не может быть пустым').notEmpty(),
    check('body', 'Тело заметки не может быть пустым').notEmpty(),
    check('body', 'Тело заметки не может быть блоее 1000 символов').isLength({ min: 0, max: 1000 }),
-], noteController.updateNote);
+], updateNote);
 
-router.delete('/note/delete/:id', noteController.deleteNote);
-router.get('/note/share/:id', noteController.shareNote);
-router.get('/:link', noteController.getSharedNote);
+router.delete('/note/delete/:id', deleteNote);
+router.get('/note/share/:id', shareNote);
+router.get('/:link', getSharedNote);
 
 module.exports = router;

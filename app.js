@@ -24,11 +24,6 @@ app.use('/auth', authRouter);
 app.use('/api', isAuth, notesRouter);
 app.use('/free', notesRouter);
 
-app.get('/', (req, res) => {
-   // const resault = req.session;
-   res.status(200).send('hellow world')
-})
-
 const init = () => {
    try {
       app.listen(PORT, () => logger.info(`Server start at port ${PORT}`));
