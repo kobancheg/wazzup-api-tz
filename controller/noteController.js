@@ -13,9 +13,9 @@ const createNote = async (req, res) => {
          return res.status(400).json({ message: 'Ошибка при создании заметки', errors })
       };
 
-      const { title, body, userId } = req.body;
+      const { title, body, person_id } = req.body;
       const newNote = await client.query(
-         `INSERT INTO Note (title, body, person_id) VALUES ($1, $2, $3) RETURNING *`, [title, body, userId]
+         `INSERT INTO Note (title, body, person_id) VALUES ($1, $2, $3) RETURNING *`, [title, body, person_id]
       );
 
       client.release();

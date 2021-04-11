@@ -31,8 +31,7 @@ const userRegistration = async (req, res) => {
             `INSERT INTO person (name, email, hash) values ($1, $2, $3) RETURNING *`, [name, email, hash]
          );
          const { name: currentName } = newPerson.rows[0];
-         return res.status(200).json(
-            { message: `${currentName} Вы успешно зарегистрированы` });
+         return res.status(200).json({ message: `${currentName} Вы успешно зарегистрированы` });
       });
 
       client.release();
